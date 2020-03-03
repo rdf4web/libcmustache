@@ -1,7 +1,7 @@
 CC = gcc
 AR = ar
 ARFLAGS = crs
-CPPFLAGS = -I.
+CPPFLAGS = -I. -DIN_LIBCMUSTACHE=1
 LDFLAGS = -L.
 CFLAGS = -Wall -Wextra -Werror
 ifeq ($(DEBUG),1)
@@ -15,7 +15,8 @@ TEST_CPPFLAGS = -DCMUSTACHE_TESTING=1 -I$(CQC_INCLUDE)
 TEST_CFLAGS = --coverage
 GCOV = gcov
 GCOV_FLAGS =
-
+TEST_FLAGS =
+PROVE = prove
 
 .PHONY : all
 
@@ -59,5 +60,5 @@ clean:
 .PHONY : check
 
 check: $(TEST_APPS)
-	set -e; for e in $(TEST_APPS); do $(RUN) ./$$e $(TEST_RUN_FLAGS); done
+	$(PROVE) $(TEST_APPS) :: $(TEST_FLAGS)
 	$(GCOV) $(GCOV_FLAGS) $(TEST_OBJECTS)
